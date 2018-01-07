@@ -16,7 +16,7 @@ public class HelloController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
     String index(Model model) {
-		model.addAttribute("data",sampleModel.findAll().get(0).getName());
+		model.addAttribute("data",sampleModel.findAll().get(0).getTitle());
         return "index";
     }
 }

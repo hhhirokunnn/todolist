@@ -16,8 +16,8 @@ public class Sample {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
  
-    @Column(name="name")
-    private String name;
+    @Column(name="title")
+    private String title;
  
     public Integer getId() {
         return id;
@@ -27,11 +27,11 @@ public class Sample {
         this.id = id;
     }
  
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
  
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
