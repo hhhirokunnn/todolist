@@ -1,4 +1,4 @@
-package com.teamlabtodolist;
+package com.teamlabtodolist.configuration;
 
 import javax.sql.DataSource;
 
