@@ -187,7 +187,7 @@ public class TodoTaskDto {
 		if(statusCd.isEmpty() || taskLimitDate == null)
 			return null;
 		Date now = new Date();
-		String styleStatus = now.before(taskLimitDate) ? "3" : statusCd;
+		String styleStatus = now.after(taskLimitDate) ? "3" : statusCd;
 		switch (styleStatus){
 		case "1":
 			return "notYet";
