@@ -145,8 +145,11 @@ public class TodoTaskService {
 			return null;
 		if(dto.getTaskLimitDate() == null)
 			return null;
-		TodoTask todoTask = new TodoTask();
+		for(TodoTaskDto t : searchTaskByTitle(title))
+			if(t.getTaskTitle().equals(title))
+				return null;
 		String result = title;
+		TodoTask todoTask = new TodoTask();
 		//入力文字をエスケープ
 		for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
 			result = title.replace(target.getKey(), target.getValue());

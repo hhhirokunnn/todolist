@@ -141,6 +141,9 @@ public class TodoListService {
 	public TodoList createTodoList(String title){
 		if(title == null || title == "" || title.length() > 30)
 			return null;
+		for(TodoListDto l : findByTitle(title))
+			if(l.getListTitle().equals(title))
+				return null;
 		String result = title;
 		//入力文字をエスケープ
 		for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
