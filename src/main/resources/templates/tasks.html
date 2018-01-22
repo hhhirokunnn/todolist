@@ -29,7 +29,7 @@
 					<td><input type="text" name="limitDate" placeholder="20180112" id="js-task-validation-limitdate"/></td>
 					</tr>
 					</table>
-	                <input type="submit" value="TODOの追加" id="js-task-validation-button"/>
+	                <button type="submit" onclick="submit();" id="js-task-validation-button">TODOの追加</button>
 	                <p id="js-task-validation-message"></p>
 	                <p id="js-task-validation-limitdate-message"></p>
 	                <input type="hidden" name="listId" th:value="${todoList.id}"/>

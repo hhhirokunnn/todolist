@@ -11,7 +11,7 @@
 <div layout:fragment="content">
 <form method="POST" action="/list/create">
 	<input type="text" name="title" placeholder="リスト名を入力" id="js-list-validation-textbox"/>
-	<input type="submit" value="作成" style="margin-left:10px;" id="js-list-validation-button"/>
+	<button type="submit" style="margin-left:10px;" onclick="submit();" id="js-list-validation-button">作成</button>
 	<p id="js-list-validation-message"></p>
 	<p id="js-list-created-message"></p>
 </form>
