@@ -10,7 +10,7 @@ import javax.persistence.Table;
 /**
  * リストとタスクの紐付けのEntity
  * @author mukaihiroto
- *
+ * 
  */
 @Entity
 @Table(name="relation_list_task")

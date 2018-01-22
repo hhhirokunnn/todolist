@@ -12,7 +12,7 @@ import com.teamlabtodolist.entity.TodoTask;
 /**
  * タスクのrepository
  * @author mukaihiroto
- *
+ * 
  */
 public interface TodoTaskRepository extends JpaRepository <TodoTask, Integer> {
 	

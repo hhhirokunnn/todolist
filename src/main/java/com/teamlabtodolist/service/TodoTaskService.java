@@ -18,6 +18,11 @@ import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
 import com.teamlabtodolist.repository.TodoTaskRepository;
 
+/**
+ * タスクのサービス
+ * @author mukaihiroto
+ * 
+ */
 @Service
 @Transactional
 public class TodoTaskService {
@@ -142,6 +147,7 @@ public class TodoTaskService {
 			return null;
 		TodoTask todoTask = new TodoTask();
 		String result = title;
+		//入力文字をエスケープ
 		for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
 			result = title.replace(target.getKey(), target.getValue());
 		todoTask.setTitle(result);
@@ -159,10 +165,12 @@ public class TodoTaskService {
 		if (updateTodoTask == null)
 			return;
 		switch (updateTodoTask.getStatusCd()){
+		//未完了->完了
 		case "1":
 			updateTodoTask.setStatusCd("2");
 			todoTaskRepository.save(updateTodoTask);
 			return;
+		//完了->未完了
 		case "2":
 			updateTodoTask.setStatusCd("1");
 			todoTaskRepository.save(updateTodoTask);

@@ -15,6 +15,11 @@ import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.repository.TodoListRepository;
 
+/**
+ * タスクのサービス
+ * @author mukaihiroto
+ *
+ */
 @Service
 @Transactional
 public class TodoListService {
@@ -137,6 +142,7 @@ public class TodoListService {
 		if(title == null || title == "" || title.length() > 30)
 			return null;
 		String result = title;
+		//入力文字をエスケープ
 		for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
 			result = title.replace(target.getKey(), target.getValue());
 		TodoList todoList = new TodoList();

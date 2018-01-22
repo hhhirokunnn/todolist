@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.repository.RelationListTaskRepository;
 
+/**
+ * 紐付けのサービス
+ * @author mukaihiroto
+ * 
+ */
 @Service
 @Transactional
 public class RelationListTaskService {

@@ -19,7 +19,7 @@ import com.teamlabtodolist.service.TodoTaskService;
 /**
  * APIのコントローラ
  * @author mukaihiroto
- *
+ * 
  */
 @RestController
 @RequestMapping("/api/v1/")

@@ -20,7 +20,7 @@ import com.teamlabtodolist.service.TodoTaskService;
 /**
  * 画面表示を行うためのコントローラ
  * @author mukaihiroto
- *
+ * 
  */
 @Controller
 public class ApplicationController {

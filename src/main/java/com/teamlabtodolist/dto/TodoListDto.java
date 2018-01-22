@@ -8,7 +8,7 @@ import com.teamlabtodolist.entity.TodoList;
 /**
  * リストのDto
  * @author mukaihiroto
- *
+ * 
  */
 public class TodoListDto {
 	

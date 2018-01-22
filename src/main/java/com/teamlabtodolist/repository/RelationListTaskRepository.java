@@ -10,6 +10,7 @@ import com.teamlabtodolist.entity.RelationListTask;
 /**
  * 紐付けのrepository
  * @author mukaihiroto
+ * 
  */
 public interface RelationListTaskRepository extends JpaRepository <RelationListTask, Integer> {
 	

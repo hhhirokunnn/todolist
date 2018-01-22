@@ -12,7 +12,7 @@ import javax.persistence.Table;
 /**
  * TODOTASKのEntity
  * @author mukaihiroto
- *
+ * 
  */
 @Entity
 @Table(name="todo_task")

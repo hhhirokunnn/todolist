@@ -5,6 +5,11 @@ import java.util.Date;
 
 import com.teamlabtodolist.entity.TodoTask;
 
+/**
+ * タスクのDTO
+ * @author mukaihiroto
+ * 
+ */
 public class TodoTaskDto {
 	
 	private Integer listId;

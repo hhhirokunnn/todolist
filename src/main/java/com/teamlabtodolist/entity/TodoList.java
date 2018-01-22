@@ -15,7 +15,7 @@ import org.springframework.format.annotation.NumberFormat;
 /**
  * リストのEntity
  * @author mukaihiroto
- *
+ * 
  */
 @Entity
 @Table(name="todo_list")

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 設定用のクラス
  * @author mukaihiroto
- *
+ * 
  */
 @Configuration
 public class ApplicationConfig {
