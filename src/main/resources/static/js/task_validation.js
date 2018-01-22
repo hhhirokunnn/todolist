@@ -12,11 +12,14 @@ $(function () {
 		}else{ 
 			$.ajax({
 				type : "GET",
-				url : "/api/v1/task",
+				url : "/api/v1/task/freeword",
+				data : {
+					title: title
+				},
 				dataType : "json",
 				success : function(data,status,xhr) {
 					for(var i in data){
-						if(title == data[i].title){
+						if(title == data[i].taskTitle){
 							$("#js-task-validation-button").prop("disabled", true);
 							$("#js-task-validation-message").append('<p style="color:#FF0000;">同じタイトルのタスクが存在してます。</p>');
 							break;

@@ -12,11 +12,14 @@ $(function () {
 		}else{ 
 			$.ajax({
 				type : "GET",
-				url : "/api/v1/list",
+				url : "/api/v1/list/freeword",
+				data : {
+					title: title
+				},
 				dataType : "json",
 				success : function(data,status,xhr) {
 					for(var i in data){
-						if(title == data[i].title){
+						if(title == data[i].listTitle){
 							$("#js-list-validation-button").prop("disabled", true);
 							$("#js-list-validation-message").append('<p style="color:#FF0000;">同じタイトルのリストが重複してます。</p>');
 							break;
