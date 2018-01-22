@@ -8,6 +8,7 @@
 	<style type="text/css">
 	.notYet {background-color:#7FFFD4;}
 	.done {background-color:#D3D3D3;}
+	.limit {background-color:#FF0000;}
 	</style>
 </head>
 <body>
@@ -37,7 +38,7 @@
 		</tr>
 	</table>
 	<div th:if="${todoTask != null}" th:each="todoTask : ${todoTasks}" style="margin-top:10px;">
-		<table style="width:100%" th:class="${todoTask.statusCd}==1? 'notYet' : 'done'">
+		<table style="width:100%" th:class="${todoTask.frontTaskStyle}">
 			<tr>
 				<td>
 					<p th:utext="${todoTask.taskTitle}" style="margin:0;"></p>

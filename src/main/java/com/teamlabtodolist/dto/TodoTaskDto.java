@@ -21,6 +21,7 @@ public class TodoTaskDto {
 	private Date taskCreated;
 	private String frontTaskLimitDate;
 	private Date taskLimitDate;
+	private String frontTaskStyle;
 	
 	public TodoTaskDto(){}
 
@@ -32,6 +33,7 @@ public class TodoTaskDto {
 		this.taskCreated = todoTask.getCreated();
 		this.taskLimitDate = todoTask.getLimitDate();
 		this.frontTaskLimitDate = getTaskFrontLimitDateByLimitDate(todoTask.getLimitDate());
+		this.frontTaskStyle = getStyleClassName(todoTask.getStatusCd(), todoTask.getLimitDate());
 	}
 	
 	public Integer getListId(){
@@ -165,5 +167,36 @@ public class TodoTaskDto {
 	 */
 	public void setStatusByStatusCd(String statusCd){
 		this.status = getStatusByStatusCd(statusCd);
+	}
+	
+	public String getFrontTaskStyle(){
+		return this.frontTaskStyle;
+	}
+	
+	public void setFrontTaskStyle(String styleByStatus){
+		this.frontTaskStyle = frontTaskStyle;
+	}
+
+	/**
+	 * フロントステータスごとにスタイルクラスを出しわける
+	 * @param statusCd
+	 * @param taskLimitDate
+	 * @return
+	 */
+	public String getStyleClassName(String statusCd, Date taskLimitDate){
+		if(statusCd.isEmpty() || taskLimitDate == null)
+			return null;
+		Date now = new Date();
+		String styleStatus = now.before(taskLimitDate) ? "3" : statusCd;
+		switch (styleStatus){
+		case "1":
+			return "notYet";
+		case "2":
+			return "done";
+		case "3":
+			return "limit";
+		default:
+			return "";
+		}
 	}
 }

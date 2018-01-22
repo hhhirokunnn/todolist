@@ -57,8 +57,8 @@ public class ApplicationController {
 		if(todoList == null)
 			return "redirect:/404.html";
 		model.addAttribute("todoList",todoList);
-		List<TodoTaskDto> todoTask = todoTaskService.getTaskDtos(listId);
-		model.addAttribute("todoTasks", todoTask);
+		List<TodoTaskDto> todoTaskDto = todoTaskService.getTaskDtos(listId);
+		model.addAttribute("todoTasks", todoTaskDto);
         return "/tasks";
     }
 	
