@@ -158,7 +158,7 @@ public class TodoTaskDto {
 	 * @param statusCds
 	 * @return
 	 */
-	public void setStatusByStatusCd(String status_cd){
-		this.status = getStatusByStatusCd(status_cd);
+	public void setStatusByStatusCd(String statusCd){
+		this.status = getStatusByStatusCd(statusCd);
 	}
 }

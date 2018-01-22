@@ -56,10 +56,8 @@ public class ApplicationController {
 		TodoList todoList = todoListService.searchById(listId);
 		if(todoList == null)
 			return "redirect:/404.html";
-		//IDのリスト
 		model.addAttribute("todoList",todoList);
 		List<TodoTaskDto> todoTask = todoTaskService.getTaskDtos(listId);
-		//タスク一覧
 		model.addAttribute("todoTasks", todoTask);
         return "/tasks";
     }
@@ -74,7 +72,7 @@ public class ApplicationController {
     }
 	
 	/**
-	 * TODOリストを作成
+	 * リストを作成
 	 * @param model
 	 * @param title
 	 * @return
@@ -115,7 +113,7 @@ public class ApplicationController {
     }
 	
 	/**
-	 * TODOタスクの更新
+	 * タスクの更新
 	 * @param id
 	 * @param taskId
 	 * @param model
@@ -137,8 +135,7 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value = "/task/{taskId}/delete", method = RequestMethod.POST)
     String deleteTodoTask(@PathVariable("taskId") Integer taskId,
-    		@RequestParam("listId") Integer listId,
-    		Model model) {
+    		@RequestParam("listId") Integer listId) {
 		todoTaskService.deleteTodoTask(listId, taskId);
 		return "redirect:/list/"+listId+"/tasks/";
     }
