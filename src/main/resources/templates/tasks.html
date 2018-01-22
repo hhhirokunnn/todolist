@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+	<title>検索ページ</title>
+	<style type="text/css">
+	.notYet {background-color:#7FFFD4;}
+	.done {background-color:#D3D3D3;}
+	</style>
+</head>
+<body>
+<div layout:decorator="layout"></div>
+<div layout:fragment="content">
+	<p th:text="${todoList.title}"></p>
+	<table>
+		<tr>
+			<td>
+				<form method="POST" th:action="@{/task/create}">
+					<table>
+					<tr>
+					<td>タスク名</td>
+					<td>期限</td>
+					</tr>
+					<tr>
+	                <td><input type="text" name="title" placeholder="タスク名" id="js-task-validation-textbox"/></td>
+					<td><input type="text" name="limitDate" placeholder="20180112" id="js-task-validation-limitdate"/></td>
+					</tr>
+					</table>
+	                <input type="submit" value="TODOの追加" id="js-task-validation-button"/>
+	                <p id="js-task-validation-message"></p>
+	                <p id="js-task-validation-limitdate-message"></p>
+	                <input type="hidden" name="listId" th:value="${todoList.id}"/>
+				</form>
+			</td>
+		</tr>
+	</table>
+	<div th:if="${todoTask != null}" th:each="todoTask : ${todoTasks}" style="margin-top:10px;">
+		<table style="width:100%" th:class="${todoTask.statusCd}==1? 'notYet' : 'done'">
+			<tr>
+				<td>
+					<p th:utext="${todoTask.taskTitle}" style="margin:0;"></p>
+					<p th:text="'期日：'+${todoTask.frontTaskLimitDate}" style="margin:0;"></p>
+					<p th:text="'作成日：'+${todoTask.taskCreated}" style="margin:0;"></p>
+				</td>
+				<td>
+					<form method="POST" th:action="@{/task/__${todoTask.taskId}__/update}">
+					<button type="submit" style="margin-left: 30%;" th:text="'ステータス：'+${todoTask.status}" ></button>
+					<input type="hidden" name="listId" th:value="${todoList.id}"/>
+					</form>
+				</td>
+				<td>
+					<form method="POST" th:action="@{/task/__${todoTask.taskId}__/delete}">
+					<button type="submit" th:text="削除"></button>
+					<input type="hidden" name="listId" th:value="${todoList.id}"/>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/task_validation.js}"></script>
+</div>
+</body>
+</html>

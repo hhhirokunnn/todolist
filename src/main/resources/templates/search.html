@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+	<title>検索ページ</title>
+</head>
+<body>
+<div layout:decorator="layout"></div>
+<div layout:fragment="content">
+<p>検索ボックス</p><input id="js-search-word" type="text" name="title" placeholder="キーワード" />
+<p id="js-search-num-tasks"></p>
+<table id="js-search-tasks" style="width:100%" rules="rows"></table>
+<p id="js-search-num-lists"></p>
+<table id="js-search-lists" style="width:100%" rules="rows"></table>
+
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/search.js}"></script>
+</div>
+</body>
+</html>
