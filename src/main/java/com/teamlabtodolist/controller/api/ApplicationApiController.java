@@ -52,24 +52,5 @@ public class ApplicationApiController {
     public List<TodoListDto> getListByTitle(@RequestParam("title") String title) {
         return todoListService.findByTitle(title);
     }
-	
-	/**
-	 * リストの全件検索API
-	 * @return
-	 */
-	@GetMapping(path="list")
-	@ResponseBody
-    public List<TodoList> getAllList() {
-        return todoListService.findAll();
-    }
-	
-	/**
-	 * タスクの全件検索API
-	 * @return
-	 */
-	@GetMapping(path="task")
-	@ResponseBody
-    public List<TodoTask> getAllTask() {
-        return todoTaskService.findAll();
-    }
+
 }
