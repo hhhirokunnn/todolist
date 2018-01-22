@@ -34,13 +34,13 @@ https://github.com/hhhirokunnn/todolist/wiki/DB%E8%A8%AD%E8%A8%88
 
 ### API設計
 
-TODO
+https://github.com/hhhirokunnn/todolist/wiki/API%E8%A8%AD%E8%A8%88
 
-### 構成
+### URL設計
 
-TODO
+https://github.com/hhhirokunnn/todolist/wiki/URL%E8%A8%AD%E8%A8%88
 
-### 開発環境のセットアップ手順
+## 開発環境のセットアップ手順
 
 ### HOMEBREW
 

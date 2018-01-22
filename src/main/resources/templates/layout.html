@@ -1,0 +1,32 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Thymeleaf de layout</title>
+<meta charset="utf-8" />
+<style>
+#content {margin-left:20%;}
+#container {width:700px;margin-top:50px;margin-left:5%;}
+</style>
+</head>
+<body>
+<div id=content>
+<header id="global-header" layout:fragment="header">
+<a href="/lists">
+<div style="margin-left: 15%; width:200px; height:50px; background-color:#90EE90; float:left;">
+<p style="margin-top: 5%; font-size: 20px; padding-left:35%;">トップ</p>
+</div>
+</a>
+<a href="/search">
+<div style="margin-left: 40px; width:200px; height:50px; background-color:#FFA500; display:inline-block;">
+<p style="margin-top: 5%;font-size: 20px; padding-left:40%; ">検索</p>
+</div>
+</a>
+</header>
+<div id="container">
+<div layout:fragment="content"></div>
+</div>
+</div>
+</body>
+</html>

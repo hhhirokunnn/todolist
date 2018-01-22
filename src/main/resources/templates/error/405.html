@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+<head>
+<title>Error</title>
+</head>
+<body>
+<h1 th:text="${status} + ' ' + ${error}">405 Not Found</h1>
+<p>The requested URL was not found on this server &#x1f607;</p>
+
+<p><a th:href="@{/lists}">Back to top</a></p>
+</body>
+</html>
