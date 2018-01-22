@@ -1,8 +1,10 @@
 package com.teamlabtodolist.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -25,6 +27,17 @@ public class TodoListService {
 	
 	@Autowired
     private RelationListTaskService relationListTaskService;
+	
+	/**
+	 * エスケープする文字のリスト
+	 */
+	public static final Map<String, String> ESCAPE_SEQUENCE = new HashMap<String,String>(){{
+		put("&", "&amp;");
+		put("\"", "&quot;");
+		put("<", "&lt;");
+		put(">", "&gt;");
+		put("'", "&#39;");
+		}};
 	
 	/**
 	 * 全件検索
@@ -123,7 +136,9 @@ public class TodoListService {
 	public TodoList createTodoList(String title){
 		if(title == null || title == "" || title.length() > 30)
 			return null;
-		String result = title.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;");
+		String result = title;
+		for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
+			result = title.replace(target.getKey(), target.getValue());
 		TodoList todoList = new TodoList();
 		todoList.setTitle(result);
 		return todoListRepository.save(todoList);
