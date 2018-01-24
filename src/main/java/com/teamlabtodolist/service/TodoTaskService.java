@@ -1,6 +1,7 @@
 package com.teamlabtodolist.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -83,6 +84,8 @@ public class TodoTaskService {
      * @return
      */
     public List<TodoTaskDto> getTaskDtos(Integer listId){
+        if(listId == null || listId <= 0)
+            return Collections.emptyList();
         HashSet<Integer> relationList = new HashSet<>();
         //リストのIDを元にタスクを期限で昇順
         relationListTaskService.findByListId(listId).forEach(r -> relationList.add(r.getTaskId()));
@@ -107,9 +110,8 @@ public class TodoTaskService {
      * @return
      */
     public List<TodoTaskDto> searchTaskByTitle(String title){
-        List<TodoTaskDto> todoTaskDtos = new ArrayList<TodoTaskDto>();
         if(StringUtils.isEmpty(title))
-            return todoTaskDtos; 
+            return Collections.emptyList(); 
         //titleによるタスク検索
         List<TodoTask> todoTasks = new ArrayList<TodoTask>();
         try{
@@ -118,12 +120,12 @@ public class TodoTaskService {
             throw new RuntimeException(e.getMessage(),e);
         }
         if(todoTasks.isEmpty())
-            return todoTaskDtos;
+            return Collections.emptyList();
         //紐付けを検索するためのidList
         HashSet<Integer> taskIds = new HashSet<>();
         todoTasks.forEach(t->taskIds.add(t.getId()));
         if(taskIds.isEmpty())
-            return todoTaskDtos;
+            return Collections.emptyList();
         List<RelationListTask> relationListTasks = relationListTaskService.findAllByTaskId(taskIds);
         //リストを検索するためのidList
         HashSet<Integer> listIds = new HashSet<>();
@@ -134,6 +136,7 @@ public class TodoTaskService {
         }catch(RuntimeException e){
             throw new RuntimeException(e.getMessage(),e);
         }
+        List<TodoTaskDto> todoTaskDtos = new ArrayList<TodoTaskDto>();
         //taskIdによるリスト検索
         for(TodoTask t : todoTasks)
             for(RelationListTask r  : relationListTasks)
