@@ -30,7 +30,11 @@ public class RelationListTaskService {
      * @return
      */
     public List<RelationListTask> findAllByTaskId(HashSet<Integer> taskIdList){
-        return (taskIdList.isEmpty()) ? Collections.emptyList()  : relationListTaskRepository.findByTaskIdIn(taskIdList);
+        try{
+            return (taskIdList.isEmpty()) ? Collections.emptyList()  : relationListTaskRepository.findByTaskIdIn(taskIdList);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -39,7 +43,11 @@ public class RelationListTaskService {
      * @return
      */
     public List<RelationListTask> findByListId(Integer listId){
-        return (listId == null || listId <= 0) ? Collections.emptyList() : relationListTaskRepository.findByListId(listId);
+        try{
+            return (listId == null || listId <= 0) ? Collections.emptyList() : relationListTaskRepository.findByListId(listId);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -48,7 +56,11 @@ public class RelationListTaskService {
      * @return
      */
     public Integer countByListId(Integer listId){
-        return (listId == null || listId <= 0) ? 0 : relationListTaskRepository.countByListId(listId);
+        try{
+            return (listId == null || listId <= 0) ? 0 : relationListTaskRepository.countByListId(listId);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -61,7 +73,11 @@ public class RelationListTaskService {
         RelationListTask relationListTask = new RelationListTask();
         relationListTask.setListId(listId);
         relationListTask.setTaskId(taskId);
-        return relationListTaskRepository.save(relationListTask);
+        try{
+            return relationListTaskRepository.save(relationListTask);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -71,7 +87,11 @@ public class RelationListTaskService {
     public void deleteRelation(Integer listId, Integer taskId){
         if(listId == null || listId <= 0 || taskId == null || taskId <= 0)
             return;
-        RelationListTask relationListTask = relationListTaskRepository.findByTaskId(taskId);
-        relationListTaskRepository.delete(relationListTask.getId());
+        try{
+            RelationListTask relationListTask = relationListTaskRepository.findByTaskId(taskId);
+            relationListTaskRepository.delete(relationListTask.getId());
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
 }

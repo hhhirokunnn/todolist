@@ -56,16 +56,25 @@ public class TodoTaskService {
      * @return
      */
     public List<TodoTask> findAll(){
-        return todoTaskRepository.findAll();
+        try{
+            return todoTaskRepository.findAll();
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
      * リストIDにひもづくタスクを取得
      * @param listId
      * @return
+     * @throws Exception 
      */
-    public TodoTask findTaskRelatedList(Integer listId){
-        return todoTaskRepository.findTaskByListId(listId);
+    public TodoTask findTaskRelatedList(Integer listId) {
+        try{
+            return todoTaskRepository.findTaskByListId(listId);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -81,7 +90,11 @@ public class TodoTaskService {
         List<TodoTask> todoTasks = new ArrayList<TodoTask>();
         if(relationList.isEmpty() || relationList.size() <= 0)
             return todoTaskDtos;
-        todoTasks = todoTaskRepository.findByIdInOrderByCreatedDesc(relationList);
+        try{
+            todoTasks = todoTaskRepository.findByIdInOrderByCreatedDesc(relationList);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
         if(!todoTasks.isEmpty())
             for(TodoTask todoTask : todoTasks)
                 todoTaskDtos.add(new TodoTaskDto(todoTask));
@@ -98,7 +111,12 @@ public class TodoTaskService {
         if(StringUtils.isEmpty(title))
             return todoTaskDtos; 
         //titleによるタスク検索
-        List<TodoTask> todoTasks = todoTaskRepository.findByTitleContainingOrderByCreatedDesc(title);
+        List<TodoTask> todoTasks = new ArrayList<TodoTask>();
+        try{
+            todoTasks = todoTaskRepository.findByTitleContainingOrderByCreatedDesc(title);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
         if(todoTasks.isEmpty())
             return todoTaskDtos;
         //紐付けを検索するためのidList
@@ -110,7 +128,12 @@ public class TodoTaskService {
         //リストを検索するためのidList
         HashSet<Integer> listIds = new HashSet<>();
         relationListTasks.forEach(r->listIds.add(r.getListId()));
-        List<TodoList> todoLists = todoListRepository.findByIdIn(listIds);
+        List<TodoList> todoLists = new ArrayList<TodoList>();
+        try{
+            todoLists = todoListRepository.findByIdIn(listIds);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
         //taskIdによるリスト検索
         for(TodoTask t : todoTasks)
             for(RelationListTask r  : relationListTasks)
@@ -131,7 +154,14 @@ public class TodoTaskService {
      * @return
      */
     public Integer countCompleteTasksByListId(Integer listId){
-        return todoTaskRepository.countCompleteTasksByListId(listId) == null ? 0 : todoTaskRepository.countCompleteTasksByListId(listId);
+        if(listId == null || listId <= 0)
+            return 0;
+        try{
+            Integer result = todoTaskRepository.countCompleteTasksByListId(listId);
+            return result == null ? 0 : result;
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -157,7 +187,11 @@ public class TodoTaskService {
         todoTask.setTitle(result);
         todoTask.setStatusCd(dto.getStatusCd());
         todoTask.setLimitDate(dto.getTaskLimitDate());
-        return todoTaskRepository.save(todoTask);
+        try{
+            return todoTaskRepository.save(todoTask);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -172,15 +206,19 @@ public class TodoTaskService {
         //未完了->完了
         case "1":
             updateTodoTask.setStatusCd("2");
-            todoTaskRepository.save(updateTodoTask);
-            return;
+            break;
         //完了->未完了
         case "2":
             updateTodoTask.setStatusCd("1");
-            todoTaskRepository.save(updateTodoTask);
-            return;
+            break;
         default:
             return;
+        }
+        try{
+            todoTaskRepository.save(updateTodoTask);
+            return;
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     
@@ -195,9 +233,13 @@ public class TodoTaskService {
             return;
         if(listId == null || listId <= 0)
             return;
-        todoTaskRepository.delete(taskId);
-        relationListTaskService.deleteRelation(listId, taskId);
-        return;
+        try{
+            todoTaskRepository.delete(taskId);
+            relationListTaskService.deleteRelation(listId, taskId);
+            return;
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
 }

@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
+import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
 
 /**
@@ -52,7 +53,11 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findAll(){
-        return todoListRepository.findAll();
+        try{
+            return todoListRepository.findAll();
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -61,7 +66,11 @@ public class TodoListService {
      * @return
      */
     public TodoList searchById(Integer listId){
-        return (listId == null || listId <= 0) ? null : todoListRepository.findOne(listId);
+        try{
+            return (listId == null || listId <= 0) ? null : todoListRepository.findOne(listId);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -70,7 +79,11 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findAllById(HashSet<Integer> listIds){
-        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findAll(listIds);
+        try{
+            return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findAll(listIds);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -79,7 +92,11 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByTaskId(HashSet<Integer> taskIds){
-        return (taskIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(taskIds);
+        try{
+            return (taskIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(taskIds);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -88,7 +105,11 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByListId(HashSet<Integer> listIds){
-        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(listIds);
+        try{
+            return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(listIds);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -99,7 +120,12 @@ public class TodoListService {
     public List<TodoListDto> findByTitle(String title){
         if (StringUtils.isEmpty(title))
             return Collections.emptyList();
-        List<TodoList> todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
+        List<TodoList> todoLists = new ArrayList<TodoList>();
+        try{
+            todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
         List<TodoListDto> todoDtos = new ArrayList<TodoListDto>();
         todoLists.forEach(l->todoDtos.add(new TodoListDto(l)));
         return todoDtos;
@@ -111,7 +137,11 @@ public class TodoListService {
      * @return
      */
     public Integer countListByTitle(String title){
-        return (StringUtils.isEmpty(title)) ? 0 : todoListRepository.countByTitleContaining(title);
+        try{
+            return (StringUtils.isEmpty(title)) ? 0 : todoListRepository.countByTitleContaining(title);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
     
     /**
@@ -126,8 +156,9 @@ public class TodoListService {
         for(TodoList todoList : todoLists){
             TodoListDto dto = new TodoListDto(todoList);
             Integer listId = new Integer(todoList.getId());
-            if(todoTaskService.findTaskRelatedList(listId) != null){
-                dto.setTaskLimitDate(todoTaskService.findTaskRelatedList(listId).getLimitDate());
+            TodoTask todotask = todoTaskService.findTaskRelatedList(listId);
+            if(todotask != null){
+                dto.setTaskLimitDate(todotask.getLimitDate());
                 dto.setFrontTaskLimitDate(dto.getFrontTaskLimitDateByLimitDate(dto.getTaskLimitDate()));
             }
             dto.setCountAllTask(relationListTaskService.countByListId(listId));
@@ -153,6 +184,10 @@ public class TodoListService {
             result = title.replace(target.getKey(), target.getValue());
         TodoList todoList = new TodoList();
         todoList.setTitle(result);
-        return todoListRepository.save(todoList);
+        try{
+            return todoListRepository.save(todoList);
+        }catch(RuntimeException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
 }
