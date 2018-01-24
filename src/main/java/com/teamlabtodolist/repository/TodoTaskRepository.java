@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.teamlabtodolist.entity.TodoTask;
 
@@ -14,6 +15,7 @@ import com.teamlabtodolist.entity.TodoTask;
  * @author mukaihiroto
  * 
  */
+@Transactional
 public interface TodoTaskRepository extends JpaRepository <TodoTask, Integer> {
     
     Integer countByTitleContaining(String taskTitle);
