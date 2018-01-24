@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApplicationConfig {
 
-	/**
-	 * SQLのログを見るためのメソッド
-	 * @return
-	 */
+    /**
+     * SQLのログを見るためのメソッド
+     * @return
+     */
     @Bean
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {

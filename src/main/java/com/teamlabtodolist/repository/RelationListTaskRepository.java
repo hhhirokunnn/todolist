@@ -13,13 +13,13 @@ import com.teamlabtodolist.entity.RelationListTask;
  * 
  */
 public interface RelationListTaskRepository extends JpaRepository <RelationListTask, Integer> {
-	
-	RelationListTask findByTaskId(Integer taskId);
-	
-	List<RelationListTask> findByListId(Integer listId);
-	
-	List<RelationListTask> findByTaskIdIn(HashSet<Integer> taskIds);
-	
-	Integer countByListId(Integer listId);
-	
+    
+    RelationListTask findByTaskId(Integer taskId);
+    
+    List<RelationListTask> findByListId(Integer listId);
+    
+    List<RelationListTask> findByTaskIdIn(HashSet<Integer> taskIds);
+    
+    Integer countByListId(Integer listId);
+    
 }

@@ -14,10 +14,10 @@ import com.teamlabtodolist.entity.TodoList;
  */
 public interface TodoListRepository extends JpaRepository <TodoList, Integer> {
 
-	List<TodoList> findByIdIn(HashSet<Integer> listIds);
-	
-	List<TodoList> findByTitleContainingOrderByCreated(String ListTitle);
-	
-	Integer countByTitleContaining(String ListTitle);
-	
+    List<TodoList> findByIdIn(HashSet<Integer> listIds);
+    
+    List<TodoList> findByTitleContainingOrderByCreated(String ListTitle);
+    
+    Integer countByTitleContaining(String ListTitle);
+    
 }
