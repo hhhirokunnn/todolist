@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.dto.TodoTaskDto;
-import com.teamlabtodolist.entity.TodoList;
-import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.service.TodoListService;
 import com.teamlabtodolist.service.TodoTaskService;
 

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.RelationListTask;
@@ -94,7 +95,7 @@ public class TodoTaskService {
      */
     public List<TodoTaskDto> searchTaskByTitle(String title){
         List<TodoTaskDto> todoTaskDtos = new ArrayList<TodoTaskDto>();
-        if(title.isEmpty())
+        if(StringUtils.isEmpty(title))
             return todoTaskDtos; 
         //titleによるタスク検索
         List<TodoTask> todoTasks = todoTaskRepository.findByTitleContainingOrderByCreatedDesc(title);
@@ -141,7 +142,7 @@ public class TodoTaskService {
         if(dto == null)
             return null;
         String title = dto.getTaskTitle();
-        if(title == null || title == "" || title.length() > 30)
+        if(StringUtils.isEmpty(title)|| title.length() > 30)
             return null;
         if(dto.getTaskLimitDate() == null)
             return null;

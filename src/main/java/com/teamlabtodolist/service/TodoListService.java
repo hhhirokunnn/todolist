@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.TodoList;
@@ -94,7 +95,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoListDto> findByTitle(String title){
-        if (title == null || title == "")
+        if (StringUtils.isEmpty(title))
             return null;
         List<TodoList> todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
         List<TodoListDto> todoDtos = new ArrayList<TodoListDto>();
@@ -108,7 +109,7 @@ public class TodoListService {
      * @return
      */
     public Integer countListByTitle(String title){
-        return (title == null || title == "") ? null : todoListRepository.countByTitleContaining(title);
+        return (StringUtils.isEmpty(title)) ? null : todoListRepository.countByTitleContaining(title);
     }
     
     /**
@@ -139,7 +140,7 @@ public class TodoListService {
      * @param title
      */
     public TodoList createTodoList(String title){
-        if(title == null || title == "" || title.length() > 30)
+        if(StringUtils.isEmpty(title) || title.length() > 30)
             return null;
         for(TodoListDto l : findByTitle(title))
             if(l.getListTitle().equals(title))

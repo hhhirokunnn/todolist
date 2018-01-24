@@ -3,6 +3,8 @@ package com.teamlabtodolist.dto;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.util.StringUtils;
+
 import com.teamlabtodolist.entity.TodoTask;
 
 /**
@@ -118,6 +120,8 @@ public class TodoTaskDto {
      * @return
      */
     public String getTaskFrontLimitDateByLimitDate(Date taskLimitDate){
+        if(StringUtils.isEmpty(taskLimitDate))
+            return "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         try{
             return sdf.format(taskLimitDate);
@@ -132,6 +136,8 @@ public class TodoTaskDto {
      * @param limitDate
      */
     public void setLimitDateFromFront(String taskLimitDate){
+        if(StringUtils.isEmpty(taskLimitDate))
+            return;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         try{
@@ -148,7 +154,7 @@ public class TodoTaskDto {
      * @return
      */
     public String getStatusByStatusCd(String statusCd){
-        if(statusCd == null || statusCd == "")
+        if(StringUtils.isEmpty(statusCd))
             return "";
         switch (statusCd) {
         case "1":
@@ -184,7 +190,7 @@ public class TodoTaskDto {
      * @return
      */
     public String getStyleClassName(String statusCd, Date taskLimitDate){
-        if(statusCd.isEmpty() || taskLimitDate == null)
+        if(StringUtils.isEmpty(statusCd) || taskLimitDate == null)
             return null;
         Date now = new Date();
         String styleStatus = now.after(taskLimitDate) ? "3" : statusCd;
