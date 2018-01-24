@@ -191,7 +191,7 @@ public class TodoTaskDto {
      */
     public String getStyleClassName(String statusCd, Date taskLimitDate){
         if(StringUtils.isEmpty(statusCd) || taskLimitDate == null)
-            return null;
+            return "";
         Date now = new Date();
         String styleStatus = now.after(taskLimitDate) ? "3" : statusCd;
         switch (styleStatus){

@@ -1,5 +1,6 @@
 package com.teamlabtodolist.service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class RelationListTaskService {
      * @return
      */
     public List<RelationListTask> findAllByTaskId(HashSet<Integer> taskIdList){
-        return (taskIdList.isEmpty()) ? null : relationListTaskRepository.findByTaskIdIn(taskIdList);
+        return (taskIdList.isEmpty()) ? Collections.emptyList()  : relationListTaskRepository.findByTaskIdIn(taskIdList);
     }
     
     /**
@@ -38,7 +39,7 @@ public class RelationListTaskService {
      * @return
      */
     public List<RelationListTask> findByListId(Integer listId){
-        return (listId == null || listId <= 0) ? null : relationListTaskRepository.findByListId(listId);
+        return (listId == null || listId <= 0) ? Collections.emptyList() : relationListTaskRepository.findByListId(listId);
     }
     
     /**
@@ -47,7 +48,7 @@ public class RelationListTaskService {
      * @return
      */
     public Integer countByListId(Integer listId){
-        return (listId == null || listId <= 0) ? null : relationListTaskRepository.countByListId(listId);
+        return (listId == null || listId <= 0) ? 0 : relationListTaskRepository.countByListId(listId);
     }
     
     /**

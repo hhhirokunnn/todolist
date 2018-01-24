@@ -1,6 +1,7 @@
 package com.teamlabtodolist.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.teamlabtodolist.dto.TodoListDto;
+import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.repository.TodoListRepository;
 
@@ -68,7 +70,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findAllById(HashSet<Integer> listIds){
-        return (listIds.isEmpty()) ? null : todoListRepository.findAll(listIds);
+        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findAll(listIds);
     }
     
     /**
@@ -77,7 +79,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByTaskId(HashSet<Integer> taskIds){
-        return (taskIds.isEmpty()) ? null : todoListRepository.findByIdIn(taskIds);
+        return (taskIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(taskIds);
     }
     
     /**
@@ -86,7 +88,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByListId(HashSet<Integer> listIds){
-        return (listIds.isEmpty()) ? null : todoListRepository.findByIdIn(listIds);
+        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(listIds);
     }
     
     /**
@@ -96,7 +98,7 @@ public class TodoListService {
      */
     public List<TodoListDto> findByTitle(String title){
         if (StringUtils.isEmpty(title))
-            return null;
+            return Collections.emptyList();
         List<TodoList> todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
         List<TodoListDto> todoDtos = new ArrayList<TodoListDto>();
         todoLists.forEach(l->todoDtos.add(new TodoListDto(l)));
@@ -109,7 +111,7 @@ public class TodoListService {
      * @return
      */
     public Integer countListByTitle(String title){
-        return (StringUtils.isEmpty(title)) ? null : todoListRepository.countByTitleContaining(title);
+        return (StringUtils.isEmpty(title)) ? 0 : todoListRepository.countByTitleContaining(title);
     }
     
     /**
