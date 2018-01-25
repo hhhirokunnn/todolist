@@ -20,11 +20,11 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
  
         ModelAndView mav = new ModelAndView();
  
-        // JSPに表示するメッセージをセットします。
+        // メッセージセット
         mav.addObject("message", "予期せぬエラーが発生しました。" +
                         " 詳細：【" + ex + "】");
  
-        // 遷移先のJSPを指定します。(error.jspに遷移します。)
+        // errorページに遷移
         mav.setViewName("error");
         return mav;
  
