@@ -13,7 +13,6 @@ import com.teamlabtodolist.entity.TodoList;
  * @author mukaihiroto
  * 
  */
-@Transactional
 public interface TodoListRepository extends JpaRepository <TodoList, Integer> {
 
     List<TodoList> findByIdIn(HashSet<Integer> listIds);

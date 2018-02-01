@@ -15,7 +15,6 @@ import com.teamlabtodolist.entity.TodoTask;
  * @author mukaihiroto
  * 
  */
-@Transactional
 public interface TodoTaskRepository extends JpaRepository <TodoTask, Integer> {
     
     Integer countByTitleContaining(String taskTitle);
