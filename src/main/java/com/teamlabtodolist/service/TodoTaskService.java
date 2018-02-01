@@ -91,7 +91,7 @@ public class TodoTaskService {
         relationListTaskService.findByListId(listId).forEach(r -> relationList.add(r.getTaskId()));
         List<TodoTaskDto> todoTaskDtos = new ArrayList<TodoTaskDto>();
         List<TodoTask> todoTasks = new ArrayList<TodoTask>();
-        if(relationList.isEmpty() || relationList.size() <= 0)
+        if(relationList.isEmpty())
             return todoTaskDtos;
         try{
             todoTasks = todoTaskRepository.findByIdInOrderByCreatedDesc(relationList);
