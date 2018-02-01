@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
+import com.teamlabtodolist.constrain.TaskStatus;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.util.TodoApplicationUtil;
 
@@ -125,14 +126,8 @@ public class TodoTaskDto {
     public String getStatusByStatusCd(String statusCd){
         if(StringUtils.isEmpty(statusCd))
             return "";
-        switch (statusCd) {
-        case "1":
-            return "未完了";
-        case "2":
-            return "完了";
-        default:
-            return "";
-        }
+        TaskStatus taskStatus = TaskStatus.of(statusCd);
+        return taskStatus == null ? "" : taskStatus.getStatusVal();
     }
     
     /**
