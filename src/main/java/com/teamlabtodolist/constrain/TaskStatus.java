@@ -8,7 +8,7 @@ import org.assertj.core.util.Strings;
  */
 public enum TaskStatus {
     NOT_YET("1","未完了"),
-    DONE("2","完了"),
+    DONE("2","完了")
     ;
     
     private String statusCd;
