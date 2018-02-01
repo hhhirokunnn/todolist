@@ -17,6 +17,7 @@ import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
+import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * タスクのサービス
@@ -158,7 +159,7 @@ public class TodoListService {
             TodoTask todotask = todoTaskService.findTaskRelatedList(listId);
             if(todotask != null){
                 dto.setTaskLimitDate(todotask.getLimitDate());
-                dto.setFrontTaskLimitDate(dto.getFrontTaskLimitDateByLimitDate(dto.getTaskLimitDate()));
+                dto.setFrontTaskLimitDate(TodoApplicationUtil.convertDateToFrontType(dto.getTaskLimitDate()));
             }
             dto.setCountAllTask(relationListTaskService.countByListId(listId));
             dto.setCountCompleteTask(todoTaskService.countCompleteTasksByListId(listId));

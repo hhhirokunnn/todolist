@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.util.StringUtils;
 
 import com.teamlabtodolist.entity.TodoTask;
+import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * タスクのDTO
@@ -34,7 +35,7 @@ public class TodoTaskDto {
         this.status = getStatusByStatusCd(todoTask.getStatusCd());
         this.taskCreated = todoTask.getCreated();
         this.taskLimitDate = todoTask.getLimitDate();
-        this.frontTaskLimitDate = getTaskFrontLimitDateByLimitDate(todoTask.getLimitDate());
+        this.frontTaskLimitDate = TodoApplicationUtil.convertDateToFrontType(todoTask.getLimitDate());
         this.frontTaskStyle = getStyleClassName(todoTask.getStatusCd(), todoTask.getLimitDate());
     }
     
@@ -85,13 +86,7 @@ public class TodoTaskDto {
      * @return
      */
     public String getTaskCreated(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            return sdf.format(this.taskCreated);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return "";
+        return TodoApplicationUtil.convertDateToFrontType(this.taskCreated);
     }
     
     public void setTaskCreated(Date taskCreated){
@@ -115,37 +110,11 @@ public class TodoTaskDto {
     }
     
     /**
-     * フロントで表示する期日の形式に変換
-     * @param limitDate
-     * @return
-     */
-    public String getTaskFrontLimitDateByLimitDate(Date taskLimitDate){
-        if(StringUtils.isEmpty(taskLimitDate))
-            return "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            return sdf.format(taskLimitDate);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return "";
-    }
-    
-    /**
      * stringで受け取った期限日をdateでデータベースに格納する
      * @param limitDate
      */
-    public void setLimitDateFromFront(String taskLimitDate){
-        if(StringUtils.isEmpty(taskLimitDate))
-            return;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Date date = new Date();
-        try{
-            date = sdf.parse(taskLimitDate);
-            this.taskLimitDate = date;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+    public void setLimitDateFromFront(String date){
+        this.taskLimitDate = TodoApplicationUtil.convertDateToFrontType(date);
     }
     
     /**

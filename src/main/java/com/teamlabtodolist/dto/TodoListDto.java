@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.teamlabtodolist.entity.TodoList;
+import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * リストのDto
@@ -48,13 +49,7 @@ public class TodoListDto {
      * @return
      */
     public String getListCreated(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            return sdf.format(this.listCreated);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return "";
+        return TodoApplicationUtil.convertDateToFrontType(this.listCreated);
     }
     
     public void setListCreated(Date listCreated){
@@ -88,21 +83,6 @@ public class TodoListDto {
     
     public String getFrontTaskLimitDate(){
         return this.frontTaskLimitDate;
-    }
-    
-    /**
-     * 期日をyyyyMMddの形式でフロントに表示する
-     * @param limitDate
-     * @return
-     */
-    public String getFrontTaskLimitDateByLimitDate(Date limitDate){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            return sdf.format(limitDate);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return "";
     }
     
     public void setFrontTaskLimitDate(String frontTaskLimitDate){
