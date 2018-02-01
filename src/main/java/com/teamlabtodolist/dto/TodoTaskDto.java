@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
+import com.teamlabtodolist.constrain.StyleClassName;
 import com.teamlabtodolist.constrain.TaskStatus;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.util.TodoApplicationUtil;
@@ -157,16 +158,7 @@ public class TodoTaskDto {
         if(StringUtils.isEmpty(statusCd) || taskLimitDate == null)
             return "";
         Date now = new Date();
-        String styleStatus = now.after(taskLimitDate) ? "3" : statusCd;
-        switch (styleStatus){
-        case "1":
-            return "notYet";
-        case "2":
-            return "done";
-        case "3":
-            return "limit";
-        default:
-            return "";
-        }
+        String cd = now.after(taskLimitDate) ? "3" : statusCd;
+        return StyleClassName.of(cd).getClassName();
     }
 }

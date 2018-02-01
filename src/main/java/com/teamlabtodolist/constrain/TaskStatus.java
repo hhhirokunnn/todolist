@@ -1,6 +1,6 @@
 package com.teamlabtodolist.constrain;
 
-import org.assertj.core.util.Strings;
+import org.springframework.util.StringUtils;
 
 /**
  * タスクのステータス用のENUM
@@ -26,7 +26,7 @@ public enum TaskStatus {
      * @return
      */
     public static TaskStatus of(String cd){
-        if(Strings.isNullOrEmpty(cd))
+        if(StringUtils.isEmpty(cd))
             return null;
         for(TaskStatus obj : values()){
             if(obj.statusCd.equals(cd))
