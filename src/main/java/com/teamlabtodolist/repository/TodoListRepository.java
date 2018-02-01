@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.teamlabtodolist.entity.TodoList;
 
@@ -12,12 +13,13 @@ import com.teamlabtodolist.entity.TodoList;
  * @author mukaihiroto
  * 
  */
+@Transactional
 public interface TodoListRepository extends JpaRepository <TodoList, Integer> {
 
-	List<TodoList> findByIdIn(HashSet<Integer> listIds);
-	
-	List<TodoList> findByTitleContainingOrderByCreated(String ListTitle);
-	
-	Integer countByTitleContaining(String ListTitle);
-	
+    List<TodoList> findByIdIn(HashSet<Integer> listIds);
+    
+    List<TodoList> findByTitleContainingOrderByCreated(String ListTitle);
+    
+    Integer countByTitleContaining(String ListTitle);
+    
 }

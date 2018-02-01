@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.teamlabtodolist.entity.RelationListTask;
 
@@ -12,14 +13,15 @@ import com.teamlabtodolist.entity.RelationListTask;
  * @author mukaihiroto
  * 
  */
+@Transactional
 public interface RelationListTaskRepository extends JpaRepository <RelationListTask, Integer> {
-	
-	RelationListTask findByTaskId(Integer taskId);
-	
-	List<RelationListTask> findByListId(Integer listId);
-	
-	List<RelationListTask> findByTaskIdIn(HashSet<Integer> taskIds);
-	
-	Integer countByListId(Integer listId);
-	
+    
+    RelationListTask findByTaskId(Integer taskId);
+    
+    List<RelationListTask> findByListId(Integer listId);
+    
+    List<RelationListTask> findByTaskIdIn(HashSet<Integer> taskIds);
+    
+    Integer countByListId(Integer listId);
+    
 }

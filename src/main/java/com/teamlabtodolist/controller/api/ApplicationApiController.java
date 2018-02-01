@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.dto.TodoTaskDto;
-import com.teamlabtodolist.entity.TodoList;
-import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.service.TodoListService;
 import com.teamlabtodolist.service.TodoTaskService;
 
@@ -24,31 +22,31 @@ import com.teamlabtodolist.service.TodoTaskService;
 @RestController
 @RequestMapping("/api/v1/")
 public class ApplicationApiController {
-	
-	@Autowired
-	private TodoListService todoListService;
-	
-	@Autowired
-	private TodoTaskService todoTaskService;
-	
-	/**
-	 * タスクのキーワード検索API
-	 * @param title
-	 * @return
-	 */
-	@GetMapping(path="task/freeword")
-	@ResponseBody
+    
+    @Autowired
+    private TodoListService todoListService;
+    
+    @Autowired
+    private TodoTaskService todoTaskService;
+    
+    /**
+     * タスクのキーワード検索API
+     * @param title
+     * @return
+     */
+    @GetMapping(path="task/freeword")
+    @ResponseBody
     public List<TodoTaskDto> getTaskByTitle(@RequestParam("title") String title) {
         return todoTaskService.searchTaskByTitle(title);
     }
-	
-	/**
-	 * リストのキーワード検索API
-	 * @param title
-	 * @return
-	 */
-	@GetMapping(path="list/freeword")
-	@ResponseBody
+    
+    /**
+     * リストのキーワード検索API
+     * @param title
+     * @return
+     */
+    @GetMapping(path="list/freeword")
+    @ResponseBody
     public List<TodoListDto> getListByTitle(@RequestParam("title") String title) {
         return todoListService.findByTitle(title);
     }
