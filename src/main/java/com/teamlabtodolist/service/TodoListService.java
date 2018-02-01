@@ -17,6 +17,7 @@ import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
+import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * タスクのサービス
@@ -37,26 +38,11 @@ public class TodoListService {
     private RelationListTaskService relationListTaskService;
     
     /**
-     * エスケープする文字のリスト
-     */
-    public static final Map<String, String> ESCAPE_SEQUENCE = new HashMap<String,String>(){{
-        put("&", "&amp;");
-        put("\"", "&quot;");
-        put("<", "&lt;");
-        put(">", "&gt;");
-        put("'", "&#39;");
-        }};
-    
-    /**
      * 全件検索
      * @return
      */
     public List<TodoList> findAll(){
-        try{
-            return todoListRepository.findAll();
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return todoListRepository.findAll();
     }
     
     /**
@@ -65,11 +51,7 @@ public class TodoListService {
      * @return
      */
     public TodoList searchById(Integer listId){
-        try{
-            return (listId == null || listId <= 0) ? null : todoListRepository.findOne(listId);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return (listId == null || listId <= 0) ? null : todoListRepository.findOne(listId);
     }
     
     /**
@@ -78,11 +60,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findAllById(HashSet<Integer> listIds){
-        try{
-            return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findAll(listIds);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findAll(listIds);
     }
     
     /**
@@ -91,11 +69,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByTaskId(HashSet<Integer> taskIds){
-        try{
-            return (taskIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(taskIds);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return (taskIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(taskIds);
     }
     
     /**
@@ -104,11 +78,7 @@ public class TodoListService {
      * @return
      */
     public List<TodoList> findListByListId(HashSet<Integer> listIds){
-        try{
-            return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(listIds);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return (listIds.isEmpty()) ? Collections.emptyList() : todoListRepository.findByIdIn(listIds);
     }
     
     /**
@@ -119,12 +89,7 @@ public class TodoListService {
     public List<TodoListDto> findByTitle(String title){
         if (StringUtils.isEmpty(title))
             return Collections.emptyList();
-        List<TodoList> todoLists = new ArrayList<TodoList>();
-        try{
-            todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        List<TodoList> todoLists = todoListRepository.findByTitleContainingOrderByCreated(title);
         List<TodoListDto> todoDtos = new ArrayList<TodoListDto>();
         todoLists.forEach(l->todoDtos.add(new TodoListDto(l)));
         return todoDtos;
@@ -136,11 +101,7 @@ public class TodoListService {
      * @return
      */
     public Integer countListByTitle(String title){
-        try{
-            return (StringUtils.isEmpty(title)) ? 0 : todoListRepository.countByTitleContaining(title);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return (StringUtils.isEmpty(title)) ? 0 : todoListRepository.countByTitleContaining(title);
     }
     
     /**
@@ -158,7 +119,7 @@ public class TodoListService {
             TodoTask todotask = todoTaskService.findTaskRelatedList(listId);
             if(todotask != null){
                 dto.setTaskLimitDate(todotask.getLimitDate());
-                dto.setFrontTaskLimitDate(dto.getFrontTaskLimitDateByLimitDate(dto.getTaskLimitDate()));
+                dto.setFrontTaskLimitDate(TodoApplicationUtil.convertDateToFrontType(dto.getTaskLimitDate()));
             }
             dto.setCountAllTask(relationListTaskService.countByListId(listId));
             dto.setCountCompleteTask(todoTaskService.countCompleteTasksByListId(listId));
@@ -179,14 +140,9 @@ public class TodoListService {
                 return null;
         String result = title;
         //入力文字をエスケープ
-        for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
-            result = title.replace(target.getKey(), target.getValue());
+        result = TodoApplicationUtil.translateEscapeSequence(title);
         TodoList todoList = new TodoList();
         todoList.setTitle(result);
-        try{
-            return todoListRepository.save(todoList);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return todoListRepository.save(todoList);
     }
 }
