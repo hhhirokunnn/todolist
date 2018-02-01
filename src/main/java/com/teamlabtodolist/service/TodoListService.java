@@ -38,17 +38,6 @@ public class TodoListService {
     private RelationListTaskService relationListTaskService;
     
     /**
-     * エスケープする文字のリスト
-     */
-    public static final Map<String, String> ESCAPE_SEQUENCE = new HashMap<String,String>(){{
-        put("&", "&amp;");
-        put("\"", "&quot;");
-        put("<", "&lt;");
-        put(">", "&gt;");
-        put("'", "&#39;");
-        }};
-    
-    /**
      * 全件検索
      * @return
      */
@@ -151,8 +140,7 @@ public class TodoListService {
                 return null;
         String result = title;
         //入力文字をエスケープ
-        for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
-            result = title.replace(target.getKey(), target.getValue());
+        result = TodoApplicationUtil.translateEscapeSequence(title);
         TodoList todoList = new TodoList();
         todoList.setTitle(result);
         return todoListRepository.save(todoList);

@@ -19,6 +19,7 @@ import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
 import com.teamlabtodolist.repository.TodoTaskRepository;
+import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * タスクのサービス
@@ -40,17 +41,6 @@ public class TodoTaskService {
     
     @Autowired
     TodoListService todoListService;
-    
-    /**
-     * エスケープする文字のリスト
-     */
-    public static final Map<String, String> ESCAPE_SEQUENCE = new HashMap<String,String>(){{
-        put("&", "&amp;");
-        put("\"", "&quot;");
-        put("<", "&lt;");
-        put(">", "&gt;");
-        put("'", "&#39;");
-        }};
     
     /**
      * 全件検索
@@ -100,6 +90,8 @@ public class TodoTaskService {
     public List<TodoTaskDto> searchTaskByTitle(String title){
         if(StringUtils.isEmpty(title))
             return Collections.emptyList(); 
+        //文字列のエスケープ
+        TodoApplicationUtil.translateEscapeSequence(title);
         //titleによるタスク検索
         List<TodoTask> todoTasks = todoTaskRepository.findByTitleContainingOrderByCreatedDesc(title);
         if(todoTasks.isEmpty())
@@ -158,8 +150,7 @@ public class TodoTaskService {
         String result = title;
         TodoTask todoTask = new TodoTask();
         //入力文字をエスケープ
-        for(Map.Entry<String, String> target : ESCAPE_SEQUENCE.entrySet())
-            result = title.replace(target.getKey(), target.getValue());
+        result = TodoApplicationUtil.translateEscapeSequence(title);
         todoTask.setTitle(result);
         todoTask.setStatusCd(dto.getStatusCd());
         todoTask.setLimitDate(dto.getTaskLimitDate());
