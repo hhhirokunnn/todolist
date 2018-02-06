@@ -3,6 +3,7 @@ package com.teamlabtodolist.common;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 例外のハンドラクラスです。
  *
  */
+@ControllerAdvice
 public class GlobalExceptionResolver implements HandlerExceptionResolver {
  
     public ModelAndView resolveException(

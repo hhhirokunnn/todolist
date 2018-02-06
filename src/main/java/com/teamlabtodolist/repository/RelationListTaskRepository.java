@@ -13,7 +13,6 @@ import com.teamlabtodolist.entity.RelationListTask;
  * @author mukaihiroto
  * 
  */
-@Transactional
 public interface RelationListTaskRepository extends JpaRepository <RelationListTask, Integer> {
     
     RelationListTask findByTaskId(Integer taskId);
