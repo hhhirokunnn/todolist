@@ -17,11 +17,7 @@ public class TodoApplicationUtil {
         if(date == null)
             return "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
-        try{
-            return sdf.format(date);
-        }catch(RuntimeException e){
-            throw new RuntimeException(e.getMessage(),e);
-        }
+        return sdf.format(date);
     }
     
     /**
@@ -33,11 +29,10 @@ public class TodoApplicationUtil {
         if(StringUtils.isEmpty(strDate))
             return date;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        try{
+        try {
             return date = sdf.parse(strDate);
-        }catch(ParseException e){
-            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e.getMessage(),e);
         }
-        return date;
     }
 }
