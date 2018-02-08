@@ -1,6 +1,5 @@
 package com.teamlabtodolist.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.util.StringUtils;
