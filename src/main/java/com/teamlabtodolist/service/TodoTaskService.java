@@ -136,7 +136,7 @@ public class TodoTaskService {
         if(dto == null)
             return null;
         String title = dto.getTaskTitle();
-        if(StringUtils.isEmpty(title)|| title.length() > 30)
+        if(StringUtils.isEmpty(title)|| title.codePointCount(0, title.length()) > 30)
             return null;
         if(dto.getTaskLimitDate() == null)
             return null;

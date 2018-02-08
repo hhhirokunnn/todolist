@@ -131,7 +131,7 @@ public class TodoListService {
      * @param title
      */
     public TodoList createTodoList(String title){
-        if(StringUtils.isEmpty(title) || title.length() > 30)
+        if(StringUtils.isEmpty(title) || title.codePointCount(0, title.length()) > 30)
             return null;
         for(TodoListDto l : findByTitle(title))
             if(l.getListTitle().equals(title))
