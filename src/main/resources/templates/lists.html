@@ -18,7 +18,7 @@
 <table style="width:100%" rules="rows">
 <tr th:each="todoListDto : ${todoListDtos}">
 <td style="height:100px;">
-<a th:href="@{'/list/'+${todoListDto.listId}}+'/tasks/'" th:utext="${todoListDto.listTitle}"></a>
+<a th:href="@{'/list/'+${todoListDto.listId}}+'/tasks/'" th:text="${todoListDto.listTitle}"></a>
 <p th:text="${todoListDto.countAllTask} == 0 ? 'ToDoがありません' : ${todoListDto.countAllTask}+'個中'+${todoListDto.countCompleteTask}+'個がチェック済み'" style="margin:0;"></p>
 <p th:if="${todoListDto.countAllTask != todoListDto.countCompleteTask}" th:text="${todoListDto.countAllTask} != 0 ? '〜'+${todoListDto.frontTaskLimitDate}"></p>
 </td>

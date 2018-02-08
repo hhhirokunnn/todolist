@@ -88,8 +88,6 @@ public class TodoTaskService {
     public List<TodoTaskDto> searchTaskByTitle(String title){
         if(StringUtils.isEmpty(title))
             return Collections.emptyList(); 
-        //文字列のエスケープ
-        TodoApplicationUtil.translateEscapeSequence(title);
         //titleによるタスク検索
         List<TodoTask> todoTasks = todoTaskRepository.findByTitleContainingOrderByCreatedDesc(title);
         if(todoTasks.isEmpty())
@@ -145,11 +143,8 @@ public class TodoTaskService {
         for(TodoTaskDto t : searchTaskByTitle(title))
             if(t.getTaskTitle().equals(title))
                 return null;
-        String result = title;
         TodoTask todoTask = new TodoTask();
-        //入力文字をエスケープ
-        result = TodoApplicationUtil.translateEscapeSequence(title);
-        todoTask.setTitle(result);
+        todoTask.setTitle(title);
         todoTask.setStatusCd(dto.getStatusCd());
         todoTask.setLimitDate(dto.getTaskLimitDate());
         return todoTaskRepository.save(todoTask);

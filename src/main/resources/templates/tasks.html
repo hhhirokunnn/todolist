@@ -41,7 +41,7 @@
 		<table style="width:100%" th:class="${todoTask.frontTaskStyle}">
 			<tr>
 				<td>
-					<p th:utext="${todoTask.taskTitle}" style="margin:0;"></p>
+					<p th:text="${todoTask.taskTitle}" style="margin:0;"></p>
 					<p th:text="'期日：'+${todoTask.frontTaskLimitDate}" style="margin:0;"></p>
 					<p th:text="'作成日：'+${todoTask.taskCreated}" style="margin:0;"></p>
 				</td>

@@ -136,11 +136,8 @@ public class TodoListService {
         for(TodoListDto l : findByTitle(title))
             if(l.getListTitle().equals(title))
                 return null;
-        String result = title;
-        //入力文字をエスケープ
-        result = TodoApplicationUtil.translateEscapeSequence(title);
         TodoList todoList = new TodoList();
-        todoList.setTitle(result);
+        todoList.setTitle(title);
         return todoListRepository.save(todoList);
     }
 }
