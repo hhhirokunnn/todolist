@@ -2,10 +2,8 @@ package com.teamlabtodolist.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -13,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.teamlabtodolist.constrain.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.repository.TodoListRepository;
 import com.teamlabtodolist.repository.TodoTaskRepository;
-import com.teamlabtodolist.util.TodoApplicationUtil;
 
 /**
  * タスクのサービス
@@ -165,14 +163,14 @@ public class TodoTaskService {
         TodoTask updateTodoTask = (taskId == null || taskId <= 0) ? null : todoTaskRepository.findOne(taskId);
         if (updateTodoTask == null)
             return;
-        switch (updateTodoTask.getStatusCd()){
+        switch (TaskStatus.of(updateTodoTask.getStatusCd())){
         //未完了->完了
-        case "1":
-            updateTodoTask.setStatusCd("2");
+        case NOT_YET:
+            updateTodoTask.setStatusCd(TaskStatus.DONE.getStatusCd());
             break;
         //完了->未完了
-        case "2":
-            updateTodoTask.setStatusCd("1");
+        case DONE:
+            updateTodoTask.setStatusCd(TaskStatus.NOT_YET.getStatusCd());
             break;
         default:
             return;
