@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,13 +38,23 @@ public class ApplicationController {
     @Autowired
     private RelationListTaskService relationListTaskService;
     
+    
+    /**
+     * ログイン画面
+     * @return
+     */
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index(){
+        return "index";
+    }
+    
     /**
      * トップ画面
      * @param model
      * @return
      */
     @RequestMapping(value = "/lists", method = RequestMethod.GET)
-    String index(Model model, String creationCondition) {
+    String lists(Model model, String creationCondition) {
         model.addAttribute("todoListDtos", todoListService.findAllTodoListDto());
         return "/lists";
     }

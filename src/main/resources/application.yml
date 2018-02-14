@@ -4,3 +4,15 @@ spring:
     username: root
     password: 
     driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+security:
+  oauth2:
+    client:
+      clientId: ''
+      clientSecret: ''
+      accessTokenUri: 'https://www.googleapis.com/oauth2/v3/token'
+      userAuthorizationUri: 'https://accounts.google.com/o/oauth2/auth'
+      authenticationScheme: 'form'
+      scope: 'profile'
+      tokenName: 'oauth_token'
+    resource:
+      userInfoUri: 'https://www.googleapis.com/userinfo/v2/me'
