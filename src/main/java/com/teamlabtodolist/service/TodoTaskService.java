@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.teamlabtodolist.constrain.TaskStatus;
+import com.teamlabtodolist.constrain.CreationResult;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
@@ -148,6 +149,27 @@ public class TodoTaskService {
         todoTask.setStatusCd(dto.getStatusCd());
         todoTask.setLimitDate(dto.getTaskLimitDate());
         return todoTaskRepository.save(todoTask);
+    }
+    
+    /**
+     * バリデーションの結果
+     * @param dto
+     * @return
+     */
+    public CreationResult validateTaskCreation(TodoTaskDto dto){
+        if(dto == null)
+            return CreationResult.DTO_NULL;
+        String title = dto.getTaskTitle();
+        if(StringUtils.isEmpty(title))
+            return CreationResult.TITLE_EMPTY;
+        if(title.codePointCount(0, title.length()) > 30)
+            return CreationResult.TITLE_OUT_OF_RANGE;
+        if(dto.getTaskLimitDate() == null)
+            return CreationResult.LIMIT_DATE_EMPTY;
+        for(TodoTaskDto t : searchTaskByTitle(title))
+            if(t.getTaskTitle().equals(title))
+                return CreationResult.TITLE_DUOLICATION;
+        return CreationResult.CREATION_SUCCESS;
     }
     
     /**

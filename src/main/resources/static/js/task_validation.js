@@ -6,9 +6,6 @@ $(function () {
 		if(!title){
 			$("#js-task-validation-button").prop("disabled", true);
 			$("#js-task-validation-message").append('<p style="color:#FF0000;">タイトルを入力してください。</p>');
-		}else if(stringToArray(title).length > 30){
-			$("#js-task-validation-button").prop("disabled", true);
-			$("#js-task-validation-message").append('<p style="color:#FF0000;">タイトルを30文字以内で入力してください。</p>');
 		}else{ 
 			$.ajax({
 				type : "GET",
@@ -44,13 +41,8 @@ $(function () {
 			$("#js-task-validation-button").prop("disabled", true);
 			$("#js-task-validation-limitdate-message").append('<p style="color:#FF0000;">期日はyyyyMMddで入力してください。</p>');
 		}else{
-			if(stringToArray($("#js-task-validation-textbox").val()).length <= 30)
-				$("#js-task-validation-button").prop("disabled", false);
+			$("#js-task-validation-button").prop("disabled", false);
 		}
 	});
-	//utf8mb4の文字数をカウントするためのfunction
-	function stringToArray (str) {
-	    return str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\uD800-\uDFFF]/g) || [];
-	}
 		
 });

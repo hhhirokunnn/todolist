@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.teamlabtodolist.constrain.CreationResult;
 import com.teamlabtodolist.constrain.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.TodoList;
@@ -42,7 +45,7 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/lists", method = RequestMethod.GET)
-    String index(Model model) {
+    String index(Model model, String creationCondition) {
         model.addAttribute("todoListDtos", todoListService.findAllTodoListDto());
         return "/lists";
     }
@@ -54,7 +57,7 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/list/{listId}/tasks/", method = RequestMethod.GET)
-    String searchTaskByListId(@PathVariable("listId") Integer listId,Model model) {
+    String searchTaskByListId(@PathVariable("listId") Integer listId,Model model,String creationCondition) {
         TodoList todoList = todoListService.searchById(listId);
         if(todoList == null)
             return "redirect:/404.html";
@@ -80,8 +83,12 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/list/create", method = RequestMethod.POST)
-    String createTodoList(@RequestParam("title")String title, Model model) {
-        todoListService.createTodoList(title);
+    String createTodoList(RedirectAttributes redirectAttributes, @RequestParam("title")String title) {
+        //バリデーション
+        CreationResult creationResult = todoListService.validateListCreation(title);
+        redirectAttributes.addFlashAttribute("creationResult", creationResult.getResultMessage());
+        if(CreationResult.CREATION_SUCCESS == creationResult)
+            todoListService.createTodoList(title);
         return "redirect:/lists";
     }
     
@@ -97,17 +104,20 @@ public class ApplicationController {
     String createTodoTask(@RequestParam("listId") Integer listId,
             @RequestParam("title")String title,
             @RequestParam("limitDate")String limitDate,
+            RedirectAttributes redirectAttributes,
             Model model) {
         TodoTaskDto todoTaskDto = new TodoTaskDto();
         todoTaskDto.setLimitDateFromFront(limitDate);
-        //statusCdは初期値1
+        //statusCdに初期値を入れる
         todoTaskDto.setStatusCd(TaskStatus.NOT_YET.getStatusCd());
         todoTaskDto.setTaskTitle(title);
+        //バリデーション
+        CreationResult creationResult = todoTaskService.validateTaskCreation(todoTaskDto);
+        redirectAttributes.addFlashAttribute("creationResult", creationResult.getResultMessage());
+        if(CreationResult.CREATION_SUCCESS != creationResult)
+            return "redirect:/list/"+listId+"/tasks/";
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);
-        //タイトルがバリデーションエラーの場合nullが返ってくる
-        if(addedTask == null)
-            return "redirect:/list/"+listId+"/tasks/";
         //リストとタスクの紐付け作成
         relationListTaskService.createRelation(listId, addedTask.getId());
         model.addAttribute("todoList",todoListService.searchById(listId));
