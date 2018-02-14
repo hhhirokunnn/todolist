@@ -6,7 +6,7 @@ $(function () {
 		if(!title){
 			$("#js-list-validation-button").prop("disabled", true);
 			$("#js-list-validation-message").append('<p style="color:#FF0000;">タイトルを入力してください。</p>');
-		}else if(title.length > 30){
+		}else if(stringToArray(title).length > 30){
 			$("#js-list-validation-button").prop("disabled", true);
 			$("#js-list-validation-message").append('<p style="color:#FF0000;">タイトルを30文字以内で入力してください。</p>');
 		}else{ 
@@ -33,5 +33,8 @@ $(function () {
 			$("#js-list-validation-button").prop("disabled", false);
 		}
 	});
-		
+	//utf8mb4の文字数をカウントするためのfunction
+	function stringToArray (str) {
+	    return str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\uD800-\uDFFF]/g) || [];
+	}
 });

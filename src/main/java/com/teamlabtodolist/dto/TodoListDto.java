@@ -1,6 +1,5 @@
 package com.teamlabtodolist.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.teamlabtodolist.entity.TodoList;

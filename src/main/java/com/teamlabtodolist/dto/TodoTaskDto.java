@@ -1,6 +1,5 @@
 package com.teamlabtodolist.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.util.StringUtils;
@@ -158,7 +157,7 @@ public class TodoTaskDto {
         if(StringUtils.isEmpty(statusCd) || taskLimitDate == null)
             return "";
         Date now = new Date();
-        String cd = now.after(taskLimitDate) ? "3" : statusCd;
+        String cd = now.after(taskLimitDate) ? StyleClassName.LIMIT.getCd() : statusCd;
         return StyleClassName.of(cd).getClassName();
     }
 }

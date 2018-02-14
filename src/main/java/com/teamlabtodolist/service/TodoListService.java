@@ -2,10 +2,8 @@ package com.teamlabtodolist.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -133,16 +131,13 @@ public class TodoListService {
      * @param title
      */
     public TodoList createTodoList(String title){
-        if(StringUtils.isEmpty(title) || title.length() > 30)
+        if(StringUtils.isEmpty(title) || title.codePointCount(0, title.length()) > 30)
             return null;
         for(TodoListDto l : findByTitle(title))
             if(l.getListTitle().equals(title))
                 return null;
-        String result = title;
-        //入力文字をエスケープ
-        result = TodoApplicationUtil.translateEscapeSequence(title);
         TodoList todoList = new TodoList();
-        todoList.setTitle(result);
+        todoList.setTitle(title);
         return todoListRepository.save(todoList);
     }
 }

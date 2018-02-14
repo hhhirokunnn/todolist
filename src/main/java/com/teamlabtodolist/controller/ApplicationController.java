@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.teamlabtodolist.constrain.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
@@ -100,7 +101,7 @@ public class ApplicationController {
         TodoTaskDto todoTaskDto = new TodoTaskDto();
         todoTaskDto.setLimitDateFromFront(limitDate);
         //statusCdは初期値1
-        todoTaskDto.setStatusCd("1");
+        todoTaskDto.setStatusCd(TaskStatus.NOT_YET.getStatusCd());
         todoTaskDto.setTaskTitle(title);
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);
