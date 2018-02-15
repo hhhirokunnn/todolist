@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.teamlabtodolist.constrain.CreationResult;
 import com.teamlabtodolist.dto.TodoListDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
@@ -131,13 +132,24 @@ public class TodoListService {
      * @param title
      */
     public TodoList createTodoList(String title){
-        if(StringUtils.isEmpty(title) || title.codePointCount(0, title.length()) > 30)
-            return null;
-        for(TodoListDto l : findByTitle(title))
-            if(l.getListTitle().equals(title))
-                return null;
         TodoList todoList = new TodoList();
         todoList.setTitle(title);
         return todoListRepository.save(todoList);
+    }
+    
+    /**
+     * バリデーションの結果
+     * @param title
+     * @return
+     */
+    public CreationResult validateListCreation(String title){
+        if(StringUtils.isEmpty(title))
+            return CreationResult.TITLE_EMPTY;
+        if(title.codePointCount(0, title.length()) > 30)
+            return CreationResult.TITLE_OUT_OF_RANGE;
+        for(TodoListDto l : findByTitle(title))
+            if(l.getListTitle().equals(title))
+                return CreationResult.TITLE_DUOLICATION;
+        return CreationResult.CREATION_SUCCESS;
     }
 }
