@@ -1,20 +1,20 @@
 package com.teamlabtodolist.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.teamlabtodolist.constrain.CreationResult;
-import com.teamlabtodolist.constrain.TaskStatus;
+import com.teamlabtodolist.constraints.CreationResult;
+import com.teamlabtodolist.constraints.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
@@ -112,9 +112,12 @@ public class ApplicationController {
         todoTaskDto.setStatusCd(TaskStatus.NOT_YET.getStatusCd());
         todoTaskDto.setTaskTitle(title);
         //バリデーション
-        CreationResult creationResult = todoTaskService.validateTaskCreation(todoTaskDto);
-        redirectAttributes.addFlashAttribute("creationResult", creationResult.getResultMessage());
-        if(CreationResult.CREATION_SUCCESS != creationResult)
+        List<CreationResult> creationResults = todoTaskService.validateTaskCreation(todoTaskDto);
+        List<String> resultMessages = new ArrayList<String>();
+        creationResults.forEach(cR -> resultMessages.add(cR.getResultMessage()));
+        redirectAttributes.addFlashAttribute("creationResult", resultMessages);
+        for(CreationResult creationResult : creationResults)
+            if(creationResult.equals(CreationResult.CREATION_SUCCESS))
             return "redirect:/list/"+listId+"/tasks/";
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);

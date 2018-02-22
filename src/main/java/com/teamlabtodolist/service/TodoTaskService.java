@@ -7,12 +7,13 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.teamlabtodolist.constrain.TaskStatus;
-import com.teamlabtodolist.constrain.CreationResult;
+import com.teamlabtodolist.constraints.CreationResult;
+import com.teamlabtodolist.constraints.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
@@ -156,20 +157,24 @@ public class TodoTaskService {
      * @param dto
      * @return
      */
-    public CreationResult validateTaskCreation(TodoTaskDto dto){
+    public List<CreationResult> validateTaskCreation(TodoTaskDto dto){
+        List<CreationResult> result = new ArrayList<CreationResult>();
         if(dto == null)
-            return CreationResult.DTO_NULL;
+            result.add(CreationResult.DTO_NULL);
         String title = dto.getTaskTitle();
         if(StringUtils.isEmpty(title))
-            return CreationResult.TITLE_EMPTY;
+            result.add(CreationResult.TITLE_EMPTY);
         if(title.codePointCount(0, title.length()) > 30)
-            return CreationResult.TITLE_OUT_OF_RANGE;
+            result.add(CreationResult.TITLE_OUT_OF_RANGE);
         if(dto.getTaskLimitDate() == null)
-            return CreationResult.LIMIT_DATE_EMPTY;
+            result.add(CreationResult.LIMIT_DATE_EMPTY);
         for(TodoTaskDto t : searchTaskByTitle(title))
             if(t.getTaskTitle().equals(title))
-                return CreationResult.TITLE_DUOLICATION;
-        return CreationResult.CREATION_SUCCESS;
+                result.add(CreationResult.TITLE_DUOLICATION);
+        result.add(CreationResult.CREATION_SUCCESS);
+        if(result.isEmpty())
+            result.add(CreationResult.CREATION_SUCCESS);
+        return result;
     }
     
     /**
@@ -180,7 +185,7 @@ public class TodoTaskService {
         TodoTask updateTodoTask = (taskId == null || taskId <= 0) ? null : todoTaskRepository.findOne(taskId);
         if (updateTodoTask == null)
             return;
-        switch (TaskStatus.of(updateTodoTask.getStatusCd())){
+        switch (TaskStatus.of(updateTodoTask.getStatusCd()).get()){
         //未完了->完了
         case NOT_YET:
             updateTodoTask.setStatusCd(TaskStatus.DONE.getStatusCd());
