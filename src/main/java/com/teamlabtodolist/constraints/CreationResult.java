@@ -1,4 +1,6 @@
-package com.teamlabtodolist.constrain;
+package com.teamlabtodolist.constraints;
+
+import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
@@ -15,9 +17,9 @@ public enum CreationResult {
     DTO_NULL("6","DTOがnull"),
     ;
     
-    private String cd;
+    private final String cd;
     
-    private String resultMessage;
+    private final String resultMessage;
     
     private CreationResult (String cd, String resultMessage){
         this.cd = cd;
@@ -28,16 +30,8 @@ public enum CreationResult {
         return cd;
     }
 
-    public void setCd(String cd) {
-        this.cd = cd;
-    }
-
     public String getResultMessage() {
         return resultMessage;
-    }
-
-    public void setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
     }
 
     /**
@@ -45,15 +39,14 @@ public enum CreationResult {
      * @param cd
      * @return
      */
-    public static CreationResult of(String cd){
+    public static Optional <CreationResult> of(String cd){
         if(StringUtils.isEmpty(cd))
-            return null;
+            return Optional.empty();
         for(CreationResult obj : values()){
             if(obj.cd.equals(cd)){
-                return obj;
+                return Optional.of(obj);
             }
         }
-        return null;
+        return Optional.empty();
     }
-
 }
