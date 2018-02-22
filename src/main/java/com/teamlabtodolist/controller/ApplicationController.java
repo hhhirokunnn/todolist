@@ -45,7 +45,7 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/lists", method = RequestMethod.GET)
-    String index(Model model, String creationCondition) {
+    String index(Model model) {
         model.addAttribute("todoListDtos", todoListService.findAllTodoListDto());
         return "/lists";
     }
@@ -57,7 +57,7 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/list/{listId}/tasks/", method = RequestMethod.GET)
-    String searchTaskByListId(@PathVariable("listId") Integer listId,Model model,String creationCondition) {
+    String searchTaskByListId(@PathVariable("listId") Integer listId,Model model) {
         TodoList todoList = todoListService.searchById(listId);
         if(todoList == null)
             return "redirect:/404.html";
@@ -85,10 +85,14 @@ public class ApplicationController {
     @RequestMapping(value = "/list/create", method = RequestMethod.POST)
     String createTodoList(RedirectAttributes redirectAttributes, @RequestParam("title")String title) {
         //バリデーション
-        CreationResult creationResult = todoListService.validateListCreation(title);
-        redirectAttributes.addFlashAttribute("creationResult", creationResult.getResultMessage());
-        if(CreationResult.CREATION_SUCCESS == creationResult)
-            todoListService.createTodoList(title);
+        List<CreationResult> creationResults = todoListService.validateListCreation(title);
+        List<String> resultMessages = new ArrayList<String>();
+        creationResults.forEach(cr -> resultMessages.add(cr.getResultMessage()));
+        redirectAttributes.addFlashAttribute("resultMessages", resultMessages);
+        resultMessages.forEach(rm -> {
+            if(rm.equals(CreationResult.CREATION_SUCCESS.getResultMessage()))
+                todoListService.createTodoList(title);
+        });
         return "redirect:/lists";
     }
     
@@ -114,11 +118,11 @@ public class ApplicationController {
         //バリデーション
         List<CreationResult> creationResults = todoTaskService.validateTaskCreation(todoTaskDto);
         List<String> resultMessages = new ArrayList<String>();
-        creationResults.forEach(cR -> resultMessages.add(cR.getResultMessage()));
-        redirectAttributes.addFlashAttribute("creationResult", resultMessages);
+        creationResults.forEach(cr -> resultMessages.add(cr.getResultMessage()));
+        redirectAttributes.addFlashAttribute("resultMessages", resultMessages);
         for(CreationResult creationResult : creationResults)
-            if(creationResult.equals(CreationResult.CREATION_SUCCESS))
-            return "redirect:/list/"+listId+"/tasks/";
+            if(!creationResult.equals(CreationResult.CREATION_SUCCESS))
+                return "redirect:/list/"+listId+"/tasks/";
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);
         //リストとタスクの紐付け作成

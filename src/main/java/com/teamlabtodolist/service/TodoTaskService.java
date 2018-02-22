@@ -171,7 +171,6 @@ public class TodoTaskService {
         for(TodoTaskDto t : searchTaskByTitle(title))
             if(t.getTaskTitle().equals(title))
                 result.add(CreationResult.TITLE_DUOLICATION);
-        result.add(CreationResult.CREATION_SUCCESS);
         if(result.isEmpty())
             result.add(CreationResult.CREATION_SUCCESS);
         return result;

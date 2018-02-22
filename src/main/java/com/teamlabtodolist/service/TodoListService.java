@@ -142,14 +142,17 @@ public class TodoListService {
      * @param title
      * @return
      */
-    public CreationResult validateListCreation(String title){
+    public List<CreationResult> validateListCreation(String title){
+        List<CreationResult> result = new ArrayList<CreationResult>();
         if(StringUtils.isEmpty(title))
-            return CreationResult.TITLE_EMPTY;
+            result.add(CreationResult.TITLE_EMPTY);
         if(title.codePointCount(0, title.length()) > 30)
-            return CreationResult.TITLE_OUT_OF_RANGE;
+            result.add(CreationResult.TITLE_OUT_OF_RANGE);
         for(TodoListDto l : findByTitle(title))
             if(l.getListTitle().equals(title))
-                return CreationResult.TITLE_DUOLICATION;
-        return CreationResult.CREATION_SUCCESS;
+                result.add(CreationResult.TITLE_DUOLICATION);
+        if(result.isEmpty())
+            result.add(CreationResult.CREATION_SUCCESS);
+        return result;
     }
 }
