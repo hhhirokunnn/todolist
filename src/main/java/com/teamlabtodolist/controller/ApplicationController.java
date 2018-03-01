@@ -2,6 +2,7 @@ package com.teamlabtodolist.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -86,13 +87,13 @@ public class ApplicationController {
     String createTodoList(RedirectAttributes redirectAttributes, @RequestParam("title")String title) {
         //バリデーション
         List<CreationResult> creationResults = todoListService.validateListCreation(title);
-        List<String> resultMessages = new ArrayList<String>();
-        creationResults.forEach(cr -> resultMessages.add(cr.getResultMessage()));
-        redirectAttributes.addFlashAttribute("resultMessages", resultMessages);
-        resultMessages.forEach(rm -> {
-            if(rm.equals(CreationResult.CREATION_SUCCESS.getResultMessage()))
-                todoListService.createTodoList(title);
-        });
+        String resultMessage = creationResults.stream()
+            .map(CreationResult::getResultMessage)
+            .collect(Collectors.joining("\n"));
+        redirectAttributes.addFlashAttribute("resultMessages", resultMessage);
+        creationResults.stream()
+            .filter(creationResult -> creationResult == CreationResult.CREATION_SUCCESS)
+            .forEach(c -> todoListService.createTodoList(title));
         return "redirect:/lists";
     }
     
@@ -120,9 +121,9 @@ public class ApplicationController {
         List<String> resultMessages = new ArrayList<String>();
         creationResults.forEach(cr -> resultMessages.add(cr.getResultMessage()));
         redirectAttributes.addFlashAttribute("resultMessages", resultMessages);
-        for(CreationResult creationResult : creationResults)
-            if(!creationResult.equals(CreationResult.CREATION_SUCCESS))
-                return "redirect:/list/"+listId+"/tasks/";
+        if (creationResults.stream().noneMatch(c -> c != CreationResult.CREATION_SUCCESS)) {
+            return "redirect:/list/" + listId + "/tasks/";
+        }
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);
         //リストとタスクの紐付け作成

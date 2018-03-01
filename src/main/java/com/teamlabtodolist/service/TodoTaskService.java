@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -159,9 +158,12 @@ public class TodoTaskService {
      */
     public List<CreationResult> validateTaskCreation(TodoTaskDto dto){
         List<CreationResult> result = new ArrayList<CreationResult>();
-        if(dto == null)
+        String title = null;
+        if(dto == null) {
             result.add(CreationResult.DTO_NULL);
-        String title = dto.getTaskTitle();
+        } else {
+            title = dto.getTaskTitle();
+        }
         if(StringUtils.isEmpty(title))
             result.add(CreationResult.TITLE_EMPTY);
         if(title.codePointCount(0, title.length()) > 30)
@@ -184,7 +186,7 @@ public class TodoTaskService {
         TodoTask updateTodoTask = (taskId == null || taskId <= 0) ? null : todoTaskRepository.findOne(taskId);
         if (updateTodoTask == null)
             return;
-        switch (TaskStatus.of(updateTodoTask.getStatusCd()).get()){
+        switch (TaskStatus.of(updateTodoTask.getStatusCd()).orElseThrow(IllegalStateException::new)) {
         //未完了->完了
         case NOT_YET:
             updateTodoTask.setStatusCd(TaskStatus.DONE.getStatusCd());
