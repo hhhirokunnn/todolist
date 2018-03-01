@@ -1,11 +1,12 @@
 package com.teamlabtodolist.dto;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
-import com.teamlabtodolist.constrain.StyleClassName;
-import com.teamlabtodolist.constrain.TaskStatus;
+import com.teamlabtodolist.constraints.StyleClassName;
+import com.teamlabtodolist.constraints.TaskStatus;
 import com.teamlabtodolist.entity.TodoTask;
 import com.teamlabtodolist.util.TodoApplicationUtil;
 
@@ -126,8 +127,8 @@ public class TodoTaskDto {
     public String getStatusByStatusCd(String statusCd){
         if(StringUtils.isEmpty(statusCd))
             return "";
-        TaskStatus taskStatus = TaskStatus.of(statusCd);
-        return taskStatus == null ? "" : taskStatus.getStatusVal();
+        Optional<TaskStatus> taskStatus = TaskStatus.of(statusCd);
+        return taskStatus.isPresent() ? taskStatus.get().getStatusCd() : "";
     }
     
     /**
@@ -158,6 +159,6 @@ public class TodoTaskDto {
             return "";
         Date now = new Date();
         String cd = now.after(taskLimitDate) ? StyleClassName.LIMIT.getCd() : statusCd;
-        return StyleClassName.of(cd).getClassName();
+        return StyleClassName.of(cd).isPresent() ? StyleClassName.of(cd).get().getClassName() : "";
     }
 }

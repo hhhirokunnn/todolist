@@ -25,12 +25,11 @@ public class TodoApplicationUtil {
      * @param limitDate
      */
     public static Date convertDateToFrontType(String strDate){
-        Date date = new Date();
         if(StringUtils.isEmpty(strDate))
-            return date;
+            return null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         try {
-            return date = sdf.parse(strDate);
+            return sdf.parse(strDate);
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage(),e);
         }

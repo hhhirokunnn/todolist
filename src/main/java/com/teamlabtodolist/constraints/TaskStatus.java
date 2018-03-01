@@ -1,4 +1,6 @@
-package com.teamlabtodolist.constrain;
+package com.teamlabtodolist.constraints;
+
+import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
@@ -25,14 +27,14 @@ public enum TaskStatus {
      * @param cd
      * @return
      */
-    public static TaskStatus of(String cd){
+    public static Optional<TaskStatus> of(String cd){
         if(StringUtils.isEmpty(cd))
-            return null;
+            return Optional.empty();
         for(TaskStatus obj : values()){
             if(obj.statusCd.equals(cd))
-                return obj;
+                return Optional.of(obj);
         }
-        return null;
+        return Optional.empty();
     }
 
     public String getStatusCd() {
