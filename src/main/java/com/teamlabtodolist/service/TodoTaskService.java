@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.teamlabtodolist.constrain.TaskStatus;
+import com.teamlabtodolist.constraints.CreationResult;
+import com.teamlabtodolist.constraints.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.RelationListTask;
 import com.teamlabtodolist.entity.TodoList;
@@ -151,6 +152,33 @@ public class TodoTaskService {
     }
     
     /**
+     * バリデーションの結果
+     * @param dto
+     * @return
+     */
+    public List<CreationResult> validateTaskCreation(TodoTaskDto dto){
+        List<CreationResult> result = new ArrayList<CreationResult>();
+        String title = null;
+        if(dto == null) {
+            result.add(CreationResult.DTO_NULL);
+        } else {
+            title = dto.getTaskTitle();
+        }
+        if(StringUtils.isEmpty(title))
+            result.add(CreationResult.TITLE_EMPTY);
+        if(title.codePointCount(0, title.length()) > 30)
+            result.add(CreationResult.TITLE_OUT_OF_RANGE);
+        if(dto.getTaskLimitDate() == null)
+            result.add(CreationResult.LIMIT_DATE_EMPTY);
+        for(TodoTaskDto t : searchTaskByTitle(title))
+            if(t.getTaskTitle().equals(title))
+                result.add(CreationResult.TITLE_DUOLICATION);
+        if(result.isEmpty())
+            result.add(CreationResult.CREATION_SUCCESS);
+        return result;
+    }
+    
+    /**
      * タスクのステータス更新
      * @param taskId
      */
@@ -158,7 +186,7 @@ public class TodoTaskService {
         TodoTask updateTodoTask = (taskId == null || taskId <= 0) ? null : todoTaskRepository.findOne(taskId);
         if (updateTodoTask == null)
             return;
-        switch (TaskStatus.of(updateTodoTask.getStatusCd())){
+        switch (TaskStatus.of(updateTodoTask.getStatusCd()).orElseThrow(IllegalStateException::new)) {
         //未完了->完了
         case NOT_YET:
             updateTodoTask.setStatusCd(TaskStatus.DONE.getStatusCd());

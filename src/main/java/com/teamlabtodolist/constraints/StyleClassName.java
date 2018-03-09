@@ -1,4 +1,6 @@
-package com.teamlabtodolist.constrain;
+package com.teamlabtodolist.constraints;
+
+import java.util.Optional;
 
 import org.springframework.util.StringUtils;
 
@@ -26,15 +28,15 @@ public enum StyleClassName {
      * @param cd
      * @return
      */
-    public static StyleClassName of(String cd){
+    public static Optional<StyleClassName> of(String cd){
         if(StringUtils.isEmpty(cd))
-            return null;
+            return Optional.empty();
         for(StyleClassName obj : values()){
             if(obj.cd.equals(cd)){
-                return obj;
+                return Optional.of(obj);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public String getCd() {

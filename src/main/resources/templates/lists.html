@@ -14,6 +14,7 @@
 	<button type="submit" style="margin-left:10px;" onclick="submit();" id="js-list-validation-button">作成</button>
 	<p id="js-list-validation-message"></p>
 	<p id="js-list-created-message"></p>
+	<p th:text="${resultMessages}"></p>
 </form>
 <table style="width:100%" rules="rows">
 <tr th:each="todoListDto : ${todoListDtos}">

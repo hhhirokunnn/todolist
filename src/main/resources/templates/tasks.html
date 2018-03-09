@@ -32,6 +32,7 @@
 	                <button type="submit" onclick="submit();" id="js-task-validation-button">TODOの追加</button>
 	                <p id="js-task-validation-message"></p>
 	                <p id="js-task-validation-limitdate-message"></p>
+	                <p th:text="${resultMessages}"></p>
 	                <input type="hidden" name="listId" th:value="${todoList.id}"/>
 				</form>
 			</td>

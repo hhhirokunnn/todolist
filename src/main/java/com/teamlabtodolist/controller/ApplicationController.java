@@ -1,6 +1,8 @@
 package com.teamlabtodolist.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.teamlabtodolist.constrain.TaskStatus;
+import com.teamlabtodolist.constraints.CreationResult;
+import com.teamlabtodolist.constraints.TaskStatus;
 import com.teamlabtodolist.dto.TodoTaskDto;
 import com.teamlabtodolist.entity.TodoList;
 import com.teamlabtodolist.entity.TodoTask;
@@ -80,8 +84,16 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/list/create", method = RequestMethod.POST)
-    String createTodoList(@RequestParam("title")String title, Model model) {
-        todoListService.createTodoList(title);
+    String createTodoList(RedirectAttributes redirectAttributes, @RequestParam("title")String title) {
+        //バリデーション
+        List<CreationResult> creationResults = todoListService.validateListCreation(title);
+        String resultMessage = creationResults.stream()
+            .map(CreationResult::getResultMessage)
+            .collect(Collectors.joining("\n"));
+        redirectAttributes.addFlashAttribute("resultMessages", resultMessage);
+        creationResults.stream()
+            .filter(creationResult -> creationResult == CreationResult.CREATION_SUCCESS)
+            .forEach(c -> todoListService.createTodoList(title));
         return "redirect:/lists";
     }
     
@@ -97,17 +109,23 @@ public class ApplicationController {
     String createTodoTask(@RequestParam("listId") Integer listId,
             @RequestParam("title")String title,
             @RequestParam("limitDate")String limitDate,
+            RedirectAttributes redirectAttributes,
             Model model) {
         TodoTaskDto todoTaskDto = new TodoTaskDto();
         todoTaskDto.setLimitDateFromFront(limitDate);
-        //statusCdは初期値1
+        //statusCdに初期値を入れる
         todoTaskDto.setStatusCd(TaskStatus.NOT_YET.getStatusCd());
         todoTaskDto.setTaskTitle(title);
+        //バリデーション
+        List<CreationResult> creationResults = todoTaskService.validateTaskCreation(todoTaskDto);
+        List<String> resultMessages = new ArrayList<String>();
+        creationResults.forEach(cr -> resultMessages.add(cr.getResultMessage()));
+        redirectAttributes.addFlashAttribute("resultMessages", resultMessages);
+        if (creationResults.stream().noneMatch(c -> c != CreationResult.CREATION_SUCCESS)) {
+            return "redirect:/list/" + listId + "/tasks/";
+        }
         //タスクの作成
         TodoTask addedTask = todoTaskService.createTodoTask(todoTaskDto);
-        //タイトルがバリデーションエラーの場合nullが返ってくる
-        if(addedTask == null)
-            return "redirect:/list/"+listId+"/tasks/";
         //リストとタスクの紐付け作成
         relationListTaskService.createRelation(listId, addedTask.getId());
         model.addAttribute("todoList",todoListService.searchById(listId));
